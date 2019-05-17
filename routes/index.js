@@ -9,7 +9,6 @@ router.get('/', async function(req, res, next) {
 
   res.render('index', { title: data[0].time_test });
 
-
 });
 
 module.exports = router;
