@@ -12,7 +12,7 @@ router.get('/', async function (req, res, next) {
     for (taratsa in data) {
         const owner_data = await pool.query('SELECT id,firstname,lastname,email,phone,role from USER where id = ?', data[taratsa].owner);
         const chef_data = await pool.query('SELECT id,firstname,lastname,email,phone,role from USER where id = ?', data[taratsa].chef);
-        const chef_menu = await pool.query('SELECT menu from MENU where chef = ?', chef_data[taratsa].id);
+        const chef_menu = await pool.query('SELECT menu from MENU where chef = ?', chef_data[0].id);
         data[taratsa].owner = owner_data[0];
         data[taratsa].chef = chef_data[0];
         data[taratsa].menu = chef_menu[0];
