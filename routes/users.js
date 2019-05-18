@@ -78,6 +78,13 @@ router.post('/login', async function (req, res, next) {
 });
 
 //Get user info based on ID
+router.get('/chefs', async function (req, res, next) {
+    const data = await pool.query(`SELECT id,firstname,lastname,email,phone,role from user where role = 'chef'`);
+
+    return res.status(200).send(JSON.parse(JSON.stringify(data)))
+});
+
+//Get user info based on ID
 router.get('/:id', async function (req, res, next) {
     const data = await pool.query(`SELECT id,firstname,lastname,email,phone,role from user where id = ${req.params.id}`);
 
@@ -93,12 +100,7 @@ router.get('/:id', async function (req, res, next) {
     }
 });
 
-//Get user info based on ID
-router.get('/chefs', async function (req, res, next) {
-    const data = await pool.query(`SELECT id,firstname,lastname,email,phone,role from user where role = 'chef`);
 
-    return res.status(200).send(JSON.parse(JSON.stringify({"user_info": data})))
-});
 
 //Get user's reservations
 router.get('/:id/reservations', async function (req, res, next) {
