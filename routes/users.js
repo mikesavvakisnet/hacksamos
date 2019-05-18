@@ -49,6 +49,8 @@ router.post('/login', async function (req, res, next) {
                     "message": "Success",
                     "user_info": {
                         "id": data[0].id,
+                        "firstname": data[0].firstname,
+                        "lastname": data[0].lastname,
                         "email": data[0].email,
                         "phone": data[0].phone,
                         "role": data[0].role
@@ -77,7 +79,7 @@ router.post('/login', async function (req, res, next) {
 
 //Get user info based on ID
 router.get('/:id', async function (req, res, next) {
-    const data = await pool.query(`SELECT id,email,phone,role from user where id = ${req.params.id}`);
+    const data = await pool.query(`SELECT id,firstname,lastname,email,phone,role from user where id = ${req.params.id}`);
 
     if (data.length > 0) {
         if (data[0].role === "chef") {
