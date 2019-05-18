@@ -25,7 +25,7 @@ router.post('/register', async function (req, res, next) {
             }
         )
     } else {
-        res.status(400).send(
+        res.status(401).send(
             {
                 "message": "Problem"
             }
@@ -42,7 +42,7 @@ router.post('/login', async function (req, res, next) {
         const data = await pool.query(`select * from user where email = ?`, [email]);
         if (await bcrypt.compare(password, data[0].password)) {
             var token = jwt.sign({id: data[0].id, role: data[0].role}, process.env.JWT_SECRET, {
-                expiresIn: 86400 // expires in 24 hours
+                expiresIn: 86401 // expires in 24 hours
             });
             res.status(200).send(
                 {
@@ -58,7 +58,7 @@ router.post('/login', async function (req, res, next) {
             )
 
         } else {
-            res.status(400).send(
+            res.status(401).send(
                 {
                     "message": "Problem"
                 }
@@ -66,7 +66,7 @@ router.post('/login', async function (req, res, next) {
         }
 
     } else {
-        res.status(400).send(
+        res.status(401).send(
             {
                 "message": "Problem"
             }
