@@ -9,13 +9,6 @@ const pool = require('../config/database').pool;
 //Get all users
 router.get('/', async function (req, res, next) {
     const data = await pool.query('SELECT * from USER');
-
-    // jwt.verify("tokenhere", process.env.JWT_SECRET, function(err, decoded) {
-    //     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-    //
-    //     res.status(200).send(JSON.parse(JSON.stringify(decoded)));
-    // });
-
 });
 
 //Create user
@@ -42,24 +35,24 @@ router.post('/register', async function (req, res, next) {
 
 //Login user
 router.post('/login', async function (req, res, next) {
-
     const {email, password} = req.body;
     const userExist = await pool.query('select email from user where email = ?', [email]);
 
     if (userExist.length !== 0) {
         const data = await pool.query(`select * from user where email = ?`, [email]);
-        if(await bcrypt.compare(password, data[0].password)){
-            var token = jwt.sign({ id: data[0].id }, process.env.JWT_SECRET, {
+        if (await bcrypt.compare(password, data[0].password)) {
+            var token = jwt.sign({id: data[0].id}, process.env.JWT_SECRET, {
                 expiresIn: 86400 // expires in 24 hours
             });
             res.send(
                 {
                     "message": "Success",
+                    "user_info": "TODO TODO TODO",
                     "token": token
                 }
             ).status(200)
 
-        }else{
+        } else {
             res.send(
                 {
                     "message": "Problem"
@@ -75,6 +68,23 @@ router.post('/login', async function (req, res, next) {
         ).status(200)
     }
 
+});
+
+//Get user info based on ID
+router.get('/:id', async function (req, res, next) {
+    const data = await pool.query(`SELECT id,email,phone,role from user where id = ${req.params.id}`);
+
+    if (data.length > 0) {
+        console.log(data[0].role)
+        if (data[0].role === "CHEF") {
+            const chef = await pool.query(`SELECT * from menu where chef = ${req.params.id}`);
+            return res.send(JSON.parse(JSON.stringify({"user_info": data, "chef": chef}))).status(200)
+        } else {
+            return res.send(JSON.parse(JSON.stringify({"user_info": data}))).status(200)
+        }
+    } else {
+        return res.send({"message": "No found"}).status(200)
+    }
 });
 
 module.exports = router;
