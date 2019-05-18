@@ -13,12 +13,12 @@ router.get('/', async function (req, res, next) {
 
 //Create user
 router.post('/register', async function (req, res, next) {
-    const {email, password, phone, role} = req.body;
+    const {firstname, lastname, email, password, phone, role} = req.body;
     const userExist = await pool.query('select email from user where email = ?', [email]);
 
     if (userExist.length === 0) {
         const hashsalt = await bcrypt.hash(password, 10);
-        const data = await pool.query(`insert into user(email,password,phone,role) values (?,?,?,?)`, [email, hashsalt, phone, role]);
+        const data = await pool.query(`insert into user(firstname,lastname,email,password,phone,role) values (?,?,?,?,?,?)`, [firstname, lastname, email, hashsalt, phone, role]);
         res.status(200).send(
             {
                 "message": "Success"
