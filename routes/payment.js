@@ -28,7 +28,7 @@ router.get('/:price', async function (req, res, next) {
             "payment_method": "paypal"
         },
         "redirect_urls": {
-            "return_url": "http://127.0.0.1:3000/",
+            "return_url": `http://127.0.0.1:3000/`,
             "cancel_url": "http://127.0.0.1:3000/payments"
         },
         "transactions": [{
@@ -71,6 +71,6 @@ const createPay = (payment) => {
             }
         });
     });
-}
+};
 
 module.exports = router;
