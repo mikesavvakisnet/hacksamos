@@ -66,6 +66,14 @@ router.get('/date/:date', async function (req, res, next) {
     const data = await pool.query(`SELECT * from taratsa where id not in (select id from reservation where DATE(reservation_date) = DATE(?))`, req.params.date);
 
     if (data.length > 0) {
+        for (taratsa in data) {
+            const owner_data = await pool.query('SELECT id,firstname,lastname,email,phone,role from USER where id = ?', data[taratsa].owner);
+            const chef_data = await pool.query('SELECT id,firstname,lastname,email,phone,role from USER where id = ?', data[taratsa].chef);
+            const chef_menu = await pool.query('SELECT menu from MENU where chef = ?', chef_data[0].id);
+            data[taratsa].owner = owner_data[0];
+            data[taratsa].chef = chef_data[0];
+            data[taratsa].menu = chef_menu[0];
+        }
         return res.status(200).send(JSON.parse(JSON.stringify(data)))
     } else {
         return res.status(200).send([])
