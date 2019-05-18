@@ -83,7 +83,7 @@ router.get('/:id', async function (req, res, next) {
             return res.send(JSON.parse(JSON.stringify({"user_info": data}))).status(200)
         }
     } else {
-        return res.send({"message": "No found"}).status(200)
+        return res.send([]).status(200)
     }
 });
 
