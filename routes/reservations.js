@@ -23,6 +23,27 @@ router.post('/', async function (req, res, next) {
         const result = await pool.query('insert into reservation (user,taratsa,reservation_date,notes,payment_status) values (?,?,?,?,?)', [decoded.id, taratsa, reservation_date, notes, payment_status]);
         res.send(
             {
+                "message": "Success",
+                "reservation_id": result.insertId
+            }
+        ).status(200)
+    });
+});
+
+//Update payment status reservation
+router.post('/:id/updatePaymentStatus', async function (req, res, next) {
+    const {token,payment_status} = req.body;
+
+    jwt.verify(token, process.env.JWT_SECRET, async function (err, decoded) {
+        if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
+
+        if (decoded.role !== "USER") {
+            return res.send({"message": "ROLE INVALID"}).status(200)
+        }
+
+        const result = await pool.query('update reservation set payment_status = ? where id = ?', [payment_status,req.params.id]);
+        res.send(
+            {
                 "message": "Success"
             }
         ).status(200)
