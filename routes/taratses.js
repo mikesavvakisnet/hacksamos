@@ -24,7 +24,7 @@ router.post('/', async function (req, res, next) {
         if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
 
         if (decoded.role !== "host") {
-            return res.status(200).send({"message": "ROLE INVALID"})
+            return res.status(401).send({"message": "ROLE INVALID"})
         }
 
         const result = await pool.query('insert into taratsa (name,description,`long`,lat,owner,chef,price) values (?,?,?,?,?,?,?)', [name, description, long, lat, decoded.id, chef, price]);
