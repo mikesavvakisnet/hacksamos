@@ -19,16 +19,16 @@ router.post('/', async function (req, res, next) {
         if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
 
         if (decoded.role !== "user") {
-            return res.send({"message": "ROLE INVALID"}).status(200)
+            return res.status(200).send({"message": "ROLE INVALID"})
         }
 
         const result = await pool.query('insert into reservation (user,taratsa,reservation_date,notes,payment_status) values (?,?,?,?,?)', [decoded.id, taratsa, reservation_date, notes, payment_status]);
-        res.send(
+        res.status(200).send(
             {
                 "message": "Success",
                 "reservation_id": result.insertId
             }
-        ).status(200)
+        )
     });
 });
 
@@ -41,15 +41,15 @@ router.post('/:id/updatePaymentStatus', async function (req, res, next) {
         if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
 
         if (decoded.role !== "USER") {
-            return res.send({"message": "ROLE INVALID"}).status(200)
+            return res.status(200).send({"message": "ROLE INVALID"})
         }
 
         const result = await pool.query('update reservation set payment_status = ? where id = ?', [payment_status, req.params.id]);
-        res.send(
+        res.status(200).send(
             {
                 "message": "Success"
             }
-        ).status(200)
+        )
     });
 });
 
@@ -58,7 +58,7 @@ router.post('/:id/updatePaymentStatus', async function (req, res, next) {
 router.get('/:id', async function (req, res, next) {
     const data = await pool.query(`SELECT * from RESERVATION where id = ${req.params.id}`);
 
-    return res.send(JSON.parse(JSON.stringify(data))).status(200)
+    return res.status(200).send(JSON.parse(JSON.stringify(data)))
 
 });
 
