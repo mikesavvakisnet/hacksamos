@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const pool = require('../config/database').pool;
@@ -41,7 +41,7 @@ router.post('/login', async function (req, res, next) {
     if (userExist.length !== 0) {
         const data = await pool.query(`select * from user where email = ?`, [email]);
         if (await bcrypt.compare(password, data[0].password)) {
-            var token = jwt.sign({id: data[0].id}, process.env.JWT_SECRET, {
+            var token = jwt.sign({id: data[0].id,role: data[0].role}, process.env.JWT_SECRET, {
                 expiresIn: 86400 // expires in 24 hours
             });
             res.send(
