@@ -5,12 +5,15 @@ const jwt = require('jsonwebtoken');
 
 const pool = require('../config/database').pool;
 
+const paypal = require('paypal-rest-sdk');
+
+
 //Create reservation
 router.post('/', async function (req, res, next) {
     const {token, taratsa, reservation_date, notes} = req.body;
 
     //TODO: PAYMENT STATUS
-    const payment_status = "PENDING"
+    const payment_status = "PENDING";
 
     jwt.verify(token, process.env.JWT_SECRET, async function (err, decoded) {
         if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
@@ -32,7 +35,7 @@ router.post('/', async function (req, res, next) {
 //Big security hole :(
 //Update payment status reservation
 router.post('/:id/updatePaymentStatus', async function (req, res, next) {
-    const {token,payment_status} = req.body;
+    const {token, payment_status} = req.body;
 
     jwt.verify(token, process.env.JWT_SECRET, async function (err, decoded) {
         if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
@@ -41,7 +44,7 @@ router.post('/:id/updatePaymentStatus', async function (req, res, next) {
             return res.send({"message": "ROLE INVALID"}).status(200)
         }
 
-        const result = await pool.query('update reservation set payment_status = ? where id = ?', [payment_status,req.params.id]);
+        const result = await pool.query('update reservation set payment_status = ? where id = ?', [payment_status, req.params.id]);
         res.send(
             {
                 "message": "Success"
@@ -50,6 +53,7 @@ router.post('/:id/updatePaymentStatus', async function (req, res, next) {
     });
 });
 
+
 //Get reservation based on ID
 router.get('/:id', async function (req, res, next) {
     const data = await pool.query(`SELECT * from RESERVATION where id = ${req.params.id}`);
@@ -57,5 +61,6 @@ router.get('/:id', async function (req, res, next) {
     return res.send(JSON.parse(JSON.stringify(data))).status(200)
 
 });
+
 
 module.exports = router;

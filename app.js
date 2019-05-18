@@ -9,6 +9,7 @@ const dotenv = require('dotenv').config();
 const reservationsRouter = require('./routes/reservations');
 const taratsesRouter = require('./routes/taratses');
 const usersRouter = require('./routes/users');
+const paymentsRouter = require('./routes/payment');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/taratses', taratsesRouter);
 app.use('/users', usersRouter);
 app.use('/reservations', reservationsRouter);
+app.use('/payments', paymentsRouter);
 
 
 // catch 404 and forward to error handler
