@@ -15,8 +15,7 @@ router.get('/', async function (req, res, next) {
         data[taratsa].owner = owner_data[0];
         data[taratsa].chef = chef_data[0];
     }
-    //return res.status(200).send(JSON.parse(JSON.stringify(data)))
-    return res.status(200).send(data)
+    return res.status(200).send(JSON.parse(JSON.stringify(data)))
 });
 
 //Create taratsa
