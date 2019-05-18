@@ -48,7 +48,11 @@ router.post('/login', async function (req, res, next) {
                 {
                     //TODO: user info
                     "message": "Success",
-                    "user_info": "TODO TODO TODO",
+                    "user_info": {
+                        "email": data[0].email,
+                        "phone": data[0].phone,
+                        "role": data[0].role
+                    },
                     "token": token
                 }
             ).status(200)
