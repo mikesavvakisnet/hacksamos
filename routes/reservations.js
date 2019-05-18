@@ -17,13 +17,15 @@ router.post('/', async function (req, res, next) {
 
     jwt.verify(token, process.env.JWT_SECRET, async function (err, decoded) {
         if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
+        try {
+            const result = await pool.query('insert into reservation (user,taratsa,reservation_date,notes,payment_status) values (?,?,?,?,?)', [decoded.id, taratsa, reservation_date, notes, payment_status]);
+            const reservationdata = await pool.query('select * from reservation where id = ?', [result.insertId]);
 
-        const result = await pool.query('insert into reservation (user,taratsa,reservation_date,notes,payment_status) values (?,?,?,?,?)', [decoded.id, taratsa, reservation_date, notes, payment_status]);
-        const reservationdata = await pool.query('select * from reservation where id = ?', [result.insertId]);
+            res.status(200).send(reservationdata[0])
+        } catch (error) {
+            res.status(400).send(error)
+        }
 
-        res.status(200).send(
-            reservationdata[0]
-        )
     });
 });
 
