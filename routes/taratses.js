@@ -43,7 +43,7 @@ router.get('/:id', async function (req, res, next) {
     const data = await pool.query(`SELECT * from TARATSA where id = ${req.params.id}`);
 
     if (data.length > 0) {
-        return res.status(200).send(JSON.parse(JSON.stringify(data)))
+        return res.status(200).send(JSON.parse(JSON.stringify(data[0])))
     } else {
         return res.status(200).send([])
     }
