@@ -18,7 +18,7 @@ router.post('/', async function (req, res, next) {
     jwt.verify(token, process.env.JWT_SECRET, async function (err, decoded) {
         if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
 
-        if (decoded.role !== "USER") {
+        if (decoded.role !== "user") {
             return res.send({"message": "ROLE INVALID"}).status(200)
         }
 

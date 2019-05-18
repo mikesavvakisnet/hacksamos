@@ -29,7 +29,7 @@ router.post('/register', async function (req, res, next) {
             {
                 "message": "Problem"
             }
-        ).status(200)
+        ).status(400)
     }
 });
 
@@ -41,7 +41,7 @@ router.post('/login', async function (req, res, next) {
     if (userExist.length !== 0) {
         const data = await pool.query(`select * from user where email = ?`, [email]);
         if (await bcrypt.compare(password, data[0].password)) {
-            var token = jwt.sign({id: data[0].id,role: data[0].role}, process.env.JWT_SECRET, {
+            var token = jwt.sign({id: data[0].id, role: data[0].role}, process.env.JWT_SECRET, {
                 expiresIn: 86400 // expires in 24 hours
             });
             res.send(
@@ -49,6 +49,7 @@ router.post('/login', async function (req, res, next) {
                     //TODO: user info
                     "message": "Success",
                     "user_info": {
+                        "id": data[0].id,
                         "email": data[0].email,
                         "phone": data[0].phone,
                         "role": data[0].role
@@ -62,7 +63,7 @@ router.post('/login', async function (req, res, next) {
                 {
                     "message": "Problem"
                 }
-            ).status(200)
+            ).status(400)
         }
 
     } else {
@@ -70,7 +71,7 @@ router.post('/login', async function (req, res, next) {
             {
                 "message": "Problem"
             }
-        ).status(200)
+        ).status(400)
     }
 
 });
@@ -80,7 +81,7 @@ router.get('/:id', async function (req, res, next) {
     const data = await pool.query(`SELECT id,email,phone,role from user where id = ${req.params.id}`);
 
     if (data.length > 0) {
-        if (data[0].role === "CHEF") {
+        if (data[0].role === "chef") {
             const chef = await pool.query(`SELECT * from menu where chef = ${req.params.id}`);
             return res.send(JSON.parse(JSON.stringify({"user_info": data, "chef": chef}))).status(200)
         } else {
