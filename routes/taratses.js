@@ -8,6 +8,12 @@ const pool = require('../config/database').pool;
 //Get taratses
 router.get('/', async function (req, res, next) {
     const data = await pool.query('SELECT * from TARATSA');
+    for(taratsa in data){
+        const owner_data = await pool.query('SELECT id,email,phone,role from USER where id = ?',data[taratsa].owner);
+        const chef_data = await pool.query('SELECT id,email,phone,role from USER where id = ?',data[taratsa].chef);
+        data[taratsa].owner = owner_data[0]
+        data[taratsa].chef = chef_data[0]
+    }
     return res.status(200).send(JSON.parse(JSON.stringify(data)))
 });
 
