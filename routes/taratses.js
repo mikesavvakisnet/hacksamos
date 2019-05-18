@@ -50,6 +50,7 @@ router.get('/:id', async function (req, res, next) {
 
         data[0].owner = owner_data[0];
         data[0].chef = chef_data[0];
+        data[0].menu = chef_menu[0];
         return res.status(200).send(JSON.parse(JSON.stringify(data[0])))
     } else {
         return res.status(200).send([])
