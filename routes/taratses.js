@@ -7,7 +7,7 @@ const pool = require('../config/database').pool;
 router.get('/', async function(req, res, next) {
   const data = await pool.query('SELECT * from TARATSA');
 
-  res.send(JSON.parse(JSON.stringify(data))).status(200)
+  res.send(data).status(200)
 
 });
 
@@ -15,7 +15,7 @@ router.get('/', async function(req, res, next) {
 router.post('/', async function(req, res, next) {
   //const data = await pool.query('INSERT TO TARATSA..');
 
-  res.send(JSON.parse(JSON.stringify(data))).status(200)
+  res.send(data).status(200)
 
 });
 
@@ -23,7 +23,7 @@ router.post('/', async function(req, res, next) {
 router.get('/:id', async function(req, res, next) {
   const data = await pool.query(`SELECT * from TARATSA where id = ${req.params.id}`);
 
-  res.send(JSON.parse(JSON.stringify(data))).status(200)
+  res.send(data).status(200)
 
 });
 
