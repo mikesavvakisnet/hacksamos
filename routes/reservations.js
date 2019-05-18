@@ -29,6 +29,7 @@ router.post('/', async function (req, res, next) {
     });
 });
 
+//Big security hole :(
 //Update payment status reservation
 router.post('/:id/updatePaymentStatus', async function (req, res, next) {
     const {token,payment_status} = req.body;
