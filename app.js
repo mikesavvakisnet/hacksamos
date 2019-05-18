@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const dotenv = require('dotenv').config()
+const dotenv = require('dotenv').config();
 
 const reservationsRouter = require('./routes/reservations');
 const taratsesRouter = require('./routes/taratses');
