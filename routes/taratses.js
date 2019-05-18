@@ -33,7 +33,7 @@ router.post('/', async function (req, res, next) {
         const chef_data = await pool.query('SELECT id,firstname,lastname,email,phone,role from USER where id = ?', data[0].chef);
         data[0].owner = owner_data[0];
         data[0].chef = chef_data[0];
-        res.status(200).send(JSON.parse(JSON.stringify(data)))
+        res.status(200).send(JSON.parse(JSON.stringify(data[0])))
     });
 });
 
