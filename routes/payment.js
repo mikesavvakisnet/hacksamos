@@ -36,7 +36,7 @@ router.get('/:price', async function (req, res, next) {
                 "total": parseInt(req.params.price),
                 "currency": "EUR"
             },
-            "description": " a book on mean stack "
+            "description": "Buy taratsa!"
         }]
     };
 

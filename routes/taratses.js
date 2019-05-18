@@ -61,7 +61,8 @@ router.get('/:id', async function (req, res, next) {
 
 //Get taratsa availability based on ID and Date
 // frontend: date = new Date().toISOString().slice(0, 19).replace('T', ' ');
-router.get('/:date', async function (req, res, next) {
+router.get('/date/:date', async function (req, res, next) {
+    console.log(req.params.date);
     const data = await pool.query(`SELECT * from taratsa where id not in (select id from reservation where DATE(reservation_date) = DATE(?))`, req.params.date);
 
     if (data.length > 0) {
