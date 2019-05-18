@@ -42,7 +42,14 @@ router.post('/', async function (req, res, next) {
 router.get('/:id', async function (req, res, next) {
     const data = await pool.query(`SELECT * from TARATSA where id = ${req.params.id}`);
 
+
     if (data.length > 0) {
+        const owner_data = await pool.query('SELECT id,firstname,lastname,email,phone,role from USER where id = ?', data[0].owner);
+        const chef_data = await pool.query('SELECT id,firstname,lastname,email,phone,role from USER where id = ?', data[0].chef);
+        const chef_menu = await pool.query('SELECT menu from MENU where chef = ?', chef_data[0].id);
+
+        data[0].owner = owner_data[0];
+        data[0].chef = chef_data[0];
         return res.status(200).send(JSON.parse(JSON.stringify(data[0])))
     } else {
         return res.status(200).send([])
